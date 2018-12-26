@@ -25,6 +25,8 @@
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tracked_description)/launch/tracked.rviz"/>
 
 
+
+
   <include file="$(find hitro_sim_control)/launch/hitro_sim_gui.launch" />
 
 </launch>
