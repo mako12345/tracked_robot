@@ -1,0 +1,609 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<robot name="tracked" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Constants for robot dimensions -->
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="m_f" value="1" /> <!-- flipper mass -->
+  <xacro:property name="m_b" value="30" /> <!-- main mass -->
+  <xacro:property name="m_1" value="1" /> <!-- motor1 mass -->
+  <xacro:property name="m_2" value="1" /> <!-- motor2 mass -->
+  <xacro:property name="m_3" value="1" /> <!-- motor3 mass -->
+  <xacro:property name="m_4" value="1" /> <!-- motor4 mass -->
+  <xacro:property name="m_l2" value="1" /> <!-- l2 mass -->
+  <xacro:property name="m_l3" value="1" /> <!-- l3 mass -->
+  <xacro:property name="l_fh" value="0.10" /> <!-- flipper height -->
+  <xacro:property name="l_fd" value="0.30" /> <!-- flipper depth -->
+  <xacro:property name="l_fw" value="0.04" /> <!-- flipper width -->
+  <xacro:property name="l_fa" value="0.20" /> <!-- flipper axis width -->
+  <xacro:property name="l_bh" value="0.10" /> <!-- main height -->
+  <xacro:property name="l_bd" value="0.30" /> <!-- main depth -->
+  <xacro:property name="l_bw" value="0.28" /> <!-- main width -->
+  <xacro:property name="l_ba" value="0.20" /> <!-- main axis width -->
+  <xacro:property name="l_1" value="1" /> <!-- l1 -->
+  <xacro:property name="l_2" value="0.30" /> <!-- link2 length -->
+  <xacro:property name="l_3" value="0.30" /> <!-- link3 length -->
+  <xacro:property name="m_h" value="0.05" /> <!-- motor height -->
+
+
+  <xacro:property name="camera_link" value="0.02" /> <!-- Size of square 'camera' box -->
+  <xacro:property name="axel_offset" value="0.05" /> <!-- Space btw top of beam and the each joint -->
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find tracked_description)/urdf/tracked.gazebo" />
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find tracked_description)/urdf/materials.xacro" />
+
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <link name="world"/>
+
+  <joint name="world2base" type="floating">
+    <parent link="world"/>
+    <child link="base"/>
+  </joint>
+
+  <!-- Base Link -->
+  <link name="base">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/main_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/main_a.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${m_b}"/>
+      <inertia
+	  ixx="0.219237688" ixy="0.0" ixz="0.0"
+	  iyy="0.220820092" iyz="0.0"
+	  izz="0.393582403"/>
+    </inertial>
+  </link>
+
+  <joint name="base2FL" type="continuous">
+    <parent link="base"/>
+    <child link="FL"/>
+    <origin xyz="${l_ba/2} ${l_bw/2 + l_fw/2} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="FL">
+    <collision>
+      <origin xyz="${l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="${l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="${l_fa/2} 0 0" rpy="0 0 0"/>
+      <mass value="${m_f}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+  <joint name="base2RL" type="continuous">
+    <parent link="base"/>
+    <child link="RL"/>
+    <origin xyz="${-l_ba/2} ${l_bw/2 + l_fw/2} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="RL">
+    <collision>
+      <origin xyz="${-l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="${-l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="${-l_fa/2} 0 0" rpy="0 0 0"/>
+      <mass value="${m_f}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+  <joint name="base2FR" type="continuous">
+    <parent link="base"/>
+    <child link="FR"/>
+    <origin xyz="${l_ba/2} ${-(l_bw/2 + l_fw/2)} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="FR">
+    <collision>
+      <origin xyz="${l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="${l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="${l_fa/2} 0 0" rpy="0 0 0"/>
+      <mass value="${m_f}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+
+  <joint name="base2RR" type="continuous">
+    <parent link="base"/>
+    <child link="RR"/>
+    <origin xyz="${-l_ba/2} ${-(l_bw/2 + l_fw/2)} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="RR">
+    <collision>
+      <origin xyz="${-l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="${-l_fa/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/flipper_a.stl"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="${-l_fa/2} 0 0" rpy="0 0 0"/>
+      <mass value="${m_f}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+
+  <joint name="base2m1" type="fixed">
+    <parent link="base"/>
+    <child link="m1"/>
+    <origin xyz="0 0 ${l_bh/2}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="m1">
+    <collision>
+      <origin xyz="0 0 ${m_h/2}" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${m_h/2}" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${m_h/2}" rpy="0 0 0"/>
+      <mass value="${m_1}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+  <joint name="m1_2m2" type="continuous">
+    <parent link="m1"/>
+    <child link="m2"/>
+    <origin xyz="0 0 ${m_h}" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="m2">
+    <collision>
+      <origin xyz="0 0 ${m_h}" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${m_h/2}" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${m_h}" rpy="${PI/2} 0 0"/>
+      <mass value="${m_2}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+  <joint name="m2_2m2_center" type="fixed">
+    <parent link="m2"/>
+    <child link="m2_center"/>
+    <origin xyz="0 0 ${m_h/2}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="m2_center">
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <mass value="0.0001"/>
+      <inertia
+	  ixx="0.0001" ixy="0.0" ixz="0.0"
+	  iyy="0.0001" iyz="0.0"
+	  izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="m2_center2link2" type="continuous">
+    <parent link="m2_center"/>
+    <child link="link2"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="link2">
+    <collision>
+      <origin xyz="${l_2/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/link1_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="${l_2/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/link1_a.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="${l_2/2} 0 0" rpy="0 0 0"/>
+      <mass value="${m_l2}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+  <joint name="link2_2m3" type="fixed">
+    <parent link="link2"/>
+    <child link="m3"/>
+    <origin xyz="${l_2} 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="m3">
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <mass value="${m_3}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+  <joint name="m3_2link3" type="continuous">
+    <parent link="m3"/>
+    <child link="link3"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="link3">
+    <collision>
+      <origin xyz="${l_3/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/link1_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="${l_3/2} 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/link1_a.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="${l_3/2} 0 0" rpy="0 0 0"/>
+      <mass value="${m_3}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+  <joint name="link3_2m4" type="continuous">
+    <parent link="link3"/>
+    <child link="m4"/>
+    <origin xyz="${l_3} 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="m4">
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<mesh filename="package://tracked_description/meshes/motor_a.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <mass value="${m_4}"/>
+      <inertia
+	  ixx="0.000907922" ixy="0.0" ixz="0.0"
+	  iyy="0.007360669" iyz="0.0"
+	  izz="0.006719413"/>
+    </inertial>
+  </link>
+
+
+  <joint name="m4_2camera2" type="fixed">
+    <parent link="m4"/>
+    <child link="camera2"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera2">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+
+
+  <joint name="base2hokuyo" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="${l_ba/3+0.02} 0 ${l_bh/2+0.03}" rpy="0 0 0"/>
+    <parent link="base"/>
+    <child link="hokuyo"/>
+  </joint>
+
+  <!-- Hokuyo Laser -->
+  <link name="hokuyo">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tracked_description/meshes/hokuyo.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="camera" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <parent link="link3"/>
+    <child link="camera1"/>
+  </joint>
+
+  <!-- Camera -->
+  <link name="camera1">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+
+  <!-- generate an optical frame http://www.ros.org/reps/rep-0103.html#suffix-frames
+      so that ros and opencv can operate on the camera frame correctly -->
+  <joint name="camera1_optical_joint" type="fixed">
+    <!-- these values have to be these values otherwise the gazebo camera image
+        won't be aligned properly with the frame it is supposedly originating from -->
+    <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}"/>
+    <parent link="camera1"/>
+    <child link="camera1_optical"/>
+  </joint>
+
+  <link name="camera1_optical">
+  </link>
+
+
+  <joint name="camera2_optical_joint" type="fixed">
+    <!-- these values have to be these values otherwise the gazebo camera image
+        won't be aligned properly with the frame it is supposedly originating from -->
+    <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}"/>
+    <parent link="camera2"/>
+    <child link="camera2_optical"/>
+  </joint>
+
+  <link name="camera2_optical">
+  </link>
+
+
+  <transmission name="tran_base2FL">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2FL">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2FL">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_base2RL">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2RL">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2RL">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="tran_base2FR">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2FR">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2FR">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_base2RR">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2RR">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2RR">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_m1_2m2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="m1_2m2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_m1_2m2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_m2_center2link2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="m2_center2link2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_m2_center2link2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_m3_2link3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="m3_2link3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_m3_2link3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_link3_2m4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="link3_2m4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_link3_2m4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>

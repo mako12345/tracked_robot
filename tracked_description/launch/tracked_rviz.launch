@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+  <param name="use_sim_time" value="true"/>
+  <param name="/rviz/robot_description"
+    command="$(find xacro)/xacro --inorder '$(find tracked_description)/urdf/rviz/tracked_rviz.xacro'" />
+
+  <!-- send fake joint values -->
+<!--  <node name="joint_state_publisher2" pkg="joint_state_publisher" type="joint_state_publisher">-->
+<!--    <param name="use_gui" value="TRUE"/>-->
+<!--    <remap from="robot_description" to="/rviz/robot_description"/>-->
+<!--    <remap from="joint_states" to="/tracked_rviz/joint_states"/>-->
+<!--  </node>-->
+
+  <!-- Combine joint values -->
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher_rviz">
+		<param name="publish_frequency" type="double" value="50.0"/><!--フレームレート-->
+		<remap from="joint_states" to="/tracked_rviz/joint_states"/>
+		<remap from="robot_description" to="/rviz/robot_description"/><!--ロボットモデルを読み込んだパラメータ名-->
+		                <!--<param name="ignore_timestamp" type="bool" value="true"/>--><!--timestamp無視でjoint_state来た瞬間に更新-->
+	</node>
+
+
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tracked_description)/launch/tracked.rviz"/>
+
+
+  <include file="$(find hitro_sim_control)/launch/hitro_sim_gui.launch" />
+
+</launch>

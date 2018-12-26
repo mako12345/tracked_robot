@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<robot name="tracked" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <joint name="base2wheel_right_front_main" type="continuous">
+    <parent link="base"/>
+    <child link="wheel_right_front_main"/>
+    <origin xyz="${l_ba/2} ${-(l_bw/2 - 0.05)} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="wheel_right_front_main">
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <mass value="0.001"/>
+      <inertia
+	  ixx="0.0000001" ixy="0.0" ixz="0.0"
+	  iyy="0.0000001" iyz="0.0"
+	  izz="0.0000001"/>
+    </inertial>
+  </link>
+
+
+  <joint name="base2wheel_right_rear_main" type="continuous">
+    <parent link="base"/>
+    <child link="wheel_right_rear_main"/>
+    <origin xyz="${-l_ba/2} ${-(l_bw/2 - 0.05)} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="wheel_right_rear_main">
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <mass value="0.001"/>
+      <inertia
+	  ixx="0.0000001" ixy="0.0" ixz="0.0"
+	  iyy="0.0000001" iyz="0.0"
+	  izz="0.0000001"/>
+    </inertial>
+  </link>
+
+  <joint name="base2wheel_left_front_main" type="continuous">
+    <parent link="base"/>
+    <child link="wheel_left_front_main"/>
+    <origin xyz="${l_ba/2} ${(l_bw/2 - 0.05)} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="wheel_left_front_main">
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <mass value="0.001"/>
+      <inertia
+	  ixx="0.0000001" ixy="0.0" ixz="0.0"
+	  iyy="0.0000001" iyz="0.0"
+	  izz="0.0000001"/>
+    </inertial>
+  </link>
+
+  <joint name="base2wheel_left_rear_main" type="continuous">
+    <parent link="base"/>
+    <child link="wheel_left_rear_main"/>
+    <origin xyz="${-l_ba/2} ${(l_bw/2 - 0.05)} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="wheel_left_rear_main">
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+	<cylinder length="0.10" radius="${l_bh/2+0.01}"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <mass value="0.001"/>
+      <inertia
+	  ixx="0.0000001" ixy="0.0" ixz="0.0"
+	  iyy="0.0000001" iyz="0.0"
+	  izz="0.0000001"/>
+    </inertial>
+  </link>
+
+
+
+  <transmission name="tran_base2wheel_right_front_main">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2wheel_right_front_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2wheel_right_front_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_base2wheel_right_rear_main">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2wheel_right_rear_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2wheel_right_rear_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_base2wheel_left_front_main">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2wheel_left_front_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2wheel_left_front_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_base2wheel_left_rear_main">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base2wheel_left_rear_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_base2wheel_left_rear_main">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>
