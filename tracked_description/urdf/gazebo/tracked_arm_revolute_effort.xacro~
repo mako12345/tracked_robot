@@ -7,7 +7,7 @@
     <child link="m1"/>
     <origin xyz="0 0 ${l_bh/2}" rpy="0 0 ${PI}"/>
     <axis xyz="0 0 1"/>
-    <limit lower="${-PI}" upper="${PI}" effort="10" velocity="3" />
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="1" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -42,7 +42,7 @@
     <child link="link2"/>
     <origin xyz="0 0 ${m_h}" rpy="0 0 0"/>
     <axis xyz="0 -1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="1" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -77,8 +77,8 @@
     <parent link="link2"/>
     <child link="link3"/>
     <origin xyz="0 0 ${height2}" rpy="0 0 0"/>
-    <axis xyz="0 -1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
+    <axis xyz="0 1 0"/>
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="1" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -173,10 +173,10 @@
   <transmission name="tran_base2m1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="base2m1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor_base2m1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -184,10 +184,10 @@
   <transmission name="tran_joint1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="joint1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor_joint1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -195,38 +195,12 @@
   <transmission name="tran_joint2">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="joint2">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor_joint2">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-
-
-<!-- Force and torque sensor -->
-  <gazebo reference="joint1">
-    <provideFeedback>true</provideFeedback>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-      <updateRate>100.0</updateRate>
-      <topicName>/tracked/ft_sensor_joint1</topicName>
-      <jointName>joint1</jointName>
-    </plugin>
-  </gazebo>
-
-  <gazebo reference="joint2">
-    <provideFeedback>true</provideFeedback>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-      <updateRate>100.0</updateRate>
-      <topicName>/tracked/ft_sensor_joint2</topicName>
-      <jointName>joint2</jointName>
-    </plugin>
-  </gazebo>
 
 </robot>
