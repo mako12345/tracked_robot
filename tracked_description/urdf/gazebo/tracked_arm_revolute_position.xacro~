@@ -77,7 +77,7 @@
     <parent link="link2"/>
     <child link="link3"/>
     <origin xyz="0 0 ${height2}" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
+    <axis xyz="0 -1 0"/>
     <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
@@ -108,6 +108,41 @@
 	  izz="${mass / 12.0 * (width*width + width*width)}"/>
     </inertial>
   </link>
+
+  <joint name="tip_fixed" type="fixed">
+    <parent link="link3"/>
+    <child link="tip_cylinder"/>
+    <origin xyz="0 0 ${height2}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Top Link -->
+  <link name="tip_cylinder">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 ${PI/2} 0"/>
+      <geometry>
+	<cylinder radius="${width/2}" length="${width}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 ${PI/2} 0"/>
+      <geometry>
+	<cylinder radius="${width/2}" length="${width}"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.000001"/>
+      <inertia
+	  ixx="0.00000001" ixy="0.0" ixz="0.0"
+	  iyy="0.00000001" iyz="0.0"
+	  izz="0.00000001"/>
+    </inertial>
+  </link>
+
+
 
   <joint name="link3_2camera2" type="fixed">
     <parent link="link3"/>

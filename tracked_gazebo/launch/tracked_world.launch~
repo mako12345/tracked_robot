@@ -11,9 +11,16 @@
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/tracked.world"/>-->
+    <arg name="world_name" value="$(find tracked_gazebo)/worlds/tracked.world"/>
 <!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/roll2.world"/>-->
-    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover.world"/>
+<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover0deg.world"/>-->
+<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover10deg.world"/>-->
+<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover10deg_hard.world"/>-->
+<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover15deg.world"/>-->
+<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover15deg_hard.world"/>-->
+<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover20deg.world"/>-->
+<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover20deg_hard.world"/>-->
+
     <arg name="debug" value="$(arg debug)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="paused" value="$(arg paused)"/>

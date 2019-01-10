@@ -1,0 +1,985 @@
+<sdf version='1.4'>
+  <world name='default'>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+    </model>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>-2.26861 0.241396 1.61245 7.99415e-18 0.519643 -0.131815</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='tracked'>
+      <link name='base'>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>30</mass>
+          <inertia>
+            <ixx>0.219238</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.22082</iyy>
+            <iyz>0</iyz>
+            <izz>0.393582</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/main_a.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='base_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/main_a.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='base_visual_hokuyo'>
+          <pose>0.0866667 0 0.08 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/hokuyo.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <sensor name='head_hokuyo_sensor' type='gpu_ray'>
+          <visualize>0</visualize>
+          <update_rate>40</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>720</samples>
+                <resolution>1</resolution>
+                <min_angle>-1.5708</min_angle>
+                <max_angle>1.5708</max_angle>
+              </horizontal>
+            </scan>
+            <range>
+              <min>0.1</min>
+              <max>30</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </ray>
+          <plugin name='gazebo_ros_head_hokuyo_controller' filename='libgazebo_ros_gpu_laser.so'>
+            <topicName>/tracked/laser/scan</topicName>
+            <frameName>hokuyo</frameName>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose>0.0866667 0 0.08 0 -0 0</pose>
+        </sensor>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='FL'>
+        <pose>0.1 0.16 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.1 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.000907922</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00736067</iyy>
+            <iyz>0</iyz>
+            <izz>0.00671941</izz>
+          </inertia>
+        </inertial>
+        <collision name='FL_collision'>
+          <pose>0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='FL_visual'>
+          <pose>0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Blue</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='base2FL' type='revolute'>
+        <child>FL</child>
+        <parent>base</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <damping>0.7</damping>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='FR'>
+        <pose>0.1 -0.16 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.1 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.000907922</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00736067</iyy>
+            <iyz>0</iyz>
+            <izz>0.00671941</izz>
+          </inertia>
+        </inertial>
+        <collision name='FR_collision'>
+          <pose>0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='FR_visual'>
+          <pose>0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Blue</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='base2FR' type='revolute'>
+        <child>FR</child>
+        <parent>base</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <damping>0.7</damping>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='RL'>
+        <pose>-0.1 0.16 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.1 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.000907922</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00736067</iyy>
+            <iyz>0</iyz>
+            <izz>0.00671941</izz>
+          </inertia>
+        </inertial>
+        <collision name='RL_collision'>
+          <pose>-0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='RL_visual'>
+          <pose>-0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Blue</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='base2RL' type='revolute'>
+        <child>RL</child>
+        <parent>base</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <damping>0.7</damping>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='RR'>
+        <pose>-0.1 -0.16 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.1 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.000907922</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00736067</iyy>
+            <iyz>0</iyz>
+            <izz>0.00671941</izz>
+          </inertia>
+        </inertial>
+        <collision name='RR_collision'>
+          <pose>-0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='RR_visual'>
+          <pose>-0.1 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/flipper_a.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Blue</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='base2RR' type='revolute'>
+        <child>RR</child>
+        <parent>base</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <damping>0.7</damping>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='m1'>
+        <pose>0 0 0.05 0 -0 -3.14159</pose>
+        <inertial>
+          <pose>0 0 0.025 0 -0 0</pose>
+          <mass>0.2</mass>
+          <inertia>
+            <ixx>0.000907922</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00736067</iyy>
+            <iyz>0</iyz>
+            <izz>0.00671941</izz>
+          </inertia>
+        </inertial>
+        <collision name='m1_collision'>
+          <pose>0 0 0.025 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/motor_a.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='m1_visual'>
+          <pose>0 0 0.025 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/sato/kitani_ws/src/sne_rollover_recovery/tracked_robot/tracked_description/meshes/motor_a.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='base2m1' type='revolute'>
+        <child>m1</child>
+        <parent>base</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>3.14159</upper>
+            <effort>10</effort>
+            <velocity>3</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.7</damping>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='link2'>
+        <pose>0 0 0.1 0 -0 -3.14159</pose>
+        <inertial>
+          <pose>0 0 0.15 0 -0 0</pose>
+          <mass>0.8</mass>
+          <inertia>
+            <ixx>0.00616667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00616667</iyy>
+            <iyz>0</iyz>
+            <izz>0.000333333</izz>
+          </inertia>
+        </inertial>
+        <collision name='link2_collision'>
+          <pose>0 0 0.15 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.3</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='link2_visual'>
+          <pose>0 0 0.15 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.3</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='joint1' type='revolute'>
+        <child>link2</child>
+        <parent>m1</parent>
+        <axis>
+          <xyz>-0 1 0</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>3.14159</upper>
+            <effort>1e+06</effort>
+            <velocity>3</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.7</damping>
+          </dynamics>
+        </axis>
+        <physics>
+          <provide_feedback>1</provide_feedback>
+          <ode>
+            <provide_feedback>1</provide_feedback>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <link name='link3'>
+        <pose>0 0 0.4 0 -0 -3.14159</pose>
+        <inertial>
+          <pose>0 0 0.15 0 -0 0</pose>
+          <mass>0.300001</mass>
+          <inertia>
+            <ixx>0.0061667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0061667</iyy>
+            <iyz>0</iyz>
+            <izz>0.000333343</izz>
+          </inertia>
+        </inertial>
+        <collision name='link3_collision'>
+          <pose>0 0 0.15 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.3</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='link3_collision_tip_cylinder'>
+          <pose>0 0 0.3 -3.14158 1.57079 -1.57078</pose>
+          <geometry>
+            <cylinder>
+              <length>0.05</length>
+              <radius>0.025</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='link3_visual'>
+          <pose>0 0 0.15 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.3</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='link3_visual_camera1'>
+          <pose>0.05 0 0 2.65359e-06 1.57079 2.65359e-06</pose>
+          <geometry>
+            <box>
+              <size>0.02 0.02 0.02</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Red</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='link3_visual_camera2'>
+          <pose>0.05 0 0.3 2.65359e-06 1.57079 2.65359e-06</pose>
+          <geometry>
+            <box>
+              <size>0.02 0.02 0.02</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Red</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='link3_visual_tip_cylinder'>
+          <pose>0 0 0.3 -3.14158 1.57079 -1.57078</pose>
+          <geometry>
+            <cylinder>
+              <length>0.05</length>
+              <radius>0.025</radius>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <sensor name='camera1_optical' type='camera'>
+          <update_rate>30</update_rate>
+          <camera name='head'>
+            <horizontal_fov>1.39626</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.02</near>
+              <far>300</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.007</stddev>
+            </noise>
+          </camera>
+          <plugin name='camera_controller' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>tracked/camera1</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>camera1_link_optical</frameName>
+            <hackBaseline>0.0</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+            <CxPrime>0</CxPrime>
+            <Cx>0.0</Cx>
+            <Cy>0.0</Cy>
+            <focalLength>0.0</focalLength>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose>0.05 0 0 0.0422127 -1.57079 3.09938</pose>
+        </sensor>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <sensor name='camera2_optical' type='camera'>
+          <update_rate>30</update_rate>
+          <camera name='head'>
+            <horizontal_fov>1.39626</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.02</near>
+              <far>300</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.007</stddev>
+            </noise>
+          </camera>
+          <plugin name='camera_controller' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>tracked/camera2</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>camera1_link_optical</frameName>
+            <hackBaseline>0.0</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+            <CxPrime>0</CxPrime>
+            <Cx>0.0</Cx>
+            <Cy>0.0</Cy>
+            <focalLength>0.0</focalLength>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose>0.05 0 0.3 0.0422127 -1.57079 3.09938</pose>
+        </sensor>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='joint2' type='revolute'>
+        <child>link3</child>
+        <parent>link2</parent>
+        <axis>
+          <xyz>-0 1 0</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>3.14159</upper>
+            <effort>1e+06</effort>
+            <velocity>3</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.7</damping>
+          </dynamics>
+        </axis>
+        <physics>
+          <provide_feedback>1</provide_feedback>
+          <ode>
+            <provide_feedback>1</provide_feedback>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <plugin name='gazebo_ros_control' filename='libgazebo_ros_control.so'>
+        <robotNamespace>/tracked</robotNamespace>
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      </plugin>
+      <plugin name='ft_sensor' filename='libgazebo_ros_ft_sensor.so'>
+        <updateRate>100.0</updateRate>
+        <topicName>/tracked/ft_sensor_joint1</topicName>
+        <jointName>joint1</jointName>
+        <robotNamespace>/</robotNamespace>
+      </plugin>
+      <static>0</static>
+      <plugin name='ft_sensor' filename='libgazebo_ros_ft_sensor.so'>
+        <updateRate>100.0</updateRate>
+        <topicName>/tracked/ft_sensor_joint2</topicName>
+        <jointName>joint2</jointName>
+        <robotNamespace>/</robotNamespace>
+      </plugin>
+      <pose>0 0 0 0 -0 0</pose>
+    </model>
+    <state world_name='default'>
+      <sim_time>43 743000000</sim_time>
+      <real_time>44 323289309</real_time>
+      <wall_time>1547020590 706278262</wall_time>
+      <model name='ground_plane'>
+        <pose>0 0 0 0 -0 0</pose>
+        <link name='link'>
+          <pose>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='tracked'>
+        <pose>0.000757 -0.002699 0.179985 -1.57087 -6e-06 0.027292</pose>
+        <link name='FL'>
+          <pose>0.100717 2e-05 0.02 -1.57077 -5e-06 0.027285</pose>
+          <velocity>2.8e-05 -0.001186 0.000935 0.057359 -0.000197 0.000384</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='FR'>
+          <pose>0.100719 4.1e-05 0.339985 -1.57087 -4e-06 0.027293</pose>
+          <velocity>-0.000999 0.000161 -0.00059 -0.002556 -0.004748 -0.00298</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='RL'>
+          <pose>-0.099199 -0.005438 0.019999 -1.57083 -3e-06 0.02721</pose>
+          <velocity>0.000239 0.000411 -0.001911 -0.057213 0.005214 -0.003282</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='RR'>
+          <pose>-0.099207 -0.005416 0.339983 -1.57087 -5e-06 0.027294</pose>
+          <velocity>-0.001039 0.000706 -0.001511 -0.002234 -0.00486 -0.002891</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='base'>
+          <pose>0.000757 -0.002699 0.179985 -1.57087 -6e-06 0.027292</pose>
+          <velocity>-0.00026 4.5e-05 -0.001006 -0.002242 -0.004917 -0.002897</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='link2'>
+          <pose>-0.001972 0.097264 0.17997 1.57094 3.2e-05 -3.11423</pose>
+          <velocity>8.3e-05 6.2e-05 -0.001114 -0.00043 -0.004698 -0.002757</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='link3'>
+          <pose>-0.01018 0.397152 0.179927 1.57094 3.6e-05 -3.11423</pose>
+          <velocity>0.000912 8.6e-05 -0.001223 -8.5e-05 -0.004473 -0.002587</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='m1'>
+          <pose>-0.000607 0.047283 0.179978 1.57083 2.6e-05 -3.1143</pose>
+          <velocity>-0.000103 4.8e-05 -0.001053 -0.003077 -0.004943 -0.002901</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+    </state>
+  </world>
+</sdf>
