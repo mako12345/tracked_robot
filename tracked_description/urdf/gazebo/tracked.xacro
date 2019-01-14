@@ -89,11 +89,12 @@
     </inertial>
   </link>
 
-  <joint name="base2FL" type="continuous">
+  <joint name="base2FL" type="revolute">
     <parent link="base"/>
     <child link="FL"/>
     <origin xyz="${l_ba/2} ${l_bw/2 + l_fw/2} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -123,11 +124,12 @@
     </inertial>
   </link>
 
-  <joint name="base2RL" type="continuous">
+  <joint name="base2RL" type="revolute">
     <parent link="base"/>
     <child link="RL"/>
     <origin xyz="${-l_ba/2} ${l_bw/2 + l_fw/2} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -157,11 +159,12 @@
     </inertial>
   </link>
 
-  <joint name="base2FR" type="continuous">
+  <joint name="base2FR" type="revolute">
     <parent link="base"/>
     <child link="FR"/>
     <origin xyz="${l_ba/2} ${-(l_bw/2 + l_fw/2)} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -192,11 +195,12 @@
   </link>
 
 
-  <joint name="base2RR" type="continuous">
+  <joint name="base2RR" type="revolute">
     <parent link="base"/>
     <child link="RR"/>
     <origin xyz="${-l_ba/2} ${-(l_bw/2 + l_fw/2)} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 

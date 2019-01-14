@@ -67,7 +67,7 @@
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 	</link>
 
-	<joint name="xbase2ybase" type="continuous">
+	<joint name="xbase2ybase" type="continuos">
 		<parent link="xbase"/>
 		<child link="ybase"/>
 		<origin rpy="0 0 0" xyz="0 0 0"/>
@@ -80,7 +80,7 @@
 	</link>
 
 
-	<joint name="ybase2base" type="continuous">
+	<joint name="ybase2base" type="continuos">
 		<parent link="ybase"/>
 		<child link="base"/>
 		<origin rpy="0 0 0" xyz="0 0 0"/>
