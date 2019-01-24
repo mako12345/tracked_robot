@@ -4,7 +4,7 @@
 
   <!-- Constants for robot dimensions -->
   <xacro:property name="PI" value="3.1415926535897931"/>
-  <xacro:property name="m_f" value="200" /> <!-- flipper mass -->
+  <xacro:property name="m_f" value="1" /> <!-- flipper mass -->
   <xacro:property name="m_b" value="30" /> <!-- main mass -->
   <xacro:property name="m_1" value="0.2" /> <!-- motor1 mass -->
   <xacro:property name="m_2" value="1" /> <!-- motor2 mass -->
@@ -89,12 +89,11 @@
     </inertial>
   </link>
 
-  <joint name="base2FL" type="revolute">
+  <joint name="base2FL" type="continuous">
     <parent link="base"/>
     <child link="FL"/>
     <origin xyz="${l_ba/2} ${l_bw/2 + l_fw/2} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -124,12 +123,11 @@
     </inertial>
   </link>
 
-  <joint name="base2RL" type="revolute">
+  <joint name="base2RL" type="continuous">
     <parent link="base"/>
     <child link="RL"/>
     <origin xyz="${-l_ba/2} ${l_bw/2 + l_fw/2} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -159,12 +157,11 @@
     </inertial>
   </link>
 
-  <joint name="base2FR" type="revolute">
+  <joint name="base2FR" type="continuous">
     <parent link="base"/>
     <child link="FR"/>
     <origin xyz="${l_ba/2} ${-(l_bw/2 + l_fw/2)} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -195,12 +192,12 @@
   </link>
 
 
-  <joint name="base2RR" type="revolute">
+
+  <joint name="base2RR" type="continuous">
     <parent link="base"/>
     <child link="RR"/>
     <origin xyz="${-l_ba/2} ${-(l_bw/2 + l_fw/2)} 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -296,6 +293,168 @@
   </transmission>
 
 
+
+
+
+  <joint name="FR2FR_ftsensor1" type="continuous">
+    <parent link="FR"/>
+    <child link="FR_ftsensor1"/>
+    <origin xyz="0 ${-l_fw/2} ${l_fh/2-0.01}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="FR_ftsensor1">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="0.02 0.001 0.02"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="0.02 0.001 0.02"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00001"/>
+      <inertia
+	  ixx="0.000000001" ixy="0.0" ixz="0.0"
+	  iyy="0.000000001" iyz="0.0"
+	  izz="0.000000001"/>
+    </inertial>
+  </link>
+
+  <joint name="FR2FR_ftsensor2" type="continuous">
+    <parent link="FR"/>
+    <child link="FR_ftsensor2"/>
+    <origin xyz="0.05 ${-l_fw/2} ${l_fh/2-0.01}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="FR_ftsensor2">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="0.02 0.001 0.02"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="0.02 0.001 0.02"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00001"/>
+      <inertia
+	  ixx="0.000000001" ixy="0.0" ixz="0.0"
+	  iyy="0.000000001" iyz="0.0"
+	  izz="0.000000001"/>
+    </inertial>
+  </link>
+
+  <joint name="FR2FR_ftsensor3" type="continuous">
+    <parent link="FR"/>
+    <child link="FR_ftsensor3"/>
+    <origin xyz="0.1 ${-l_fw/2} ${l_fh/2-0.01}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <link name="FR_ftsensor3">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="0.02 0.001 0.02"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<box size="0.02 0.001 0.02"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00001"/>
+      <inertia
+	  ixx="0.000000001" ixy="0.0" ixz="0.0"
+	  iyy="0.000000001" iyz="0.0"
+	  izz="0.000000001"/>
+    </inertial>
+  </link>
+
+  <transmission name="tran_FR2FR_ftsensor1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="FR2FR_ftsensor1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_FR2FR_ftsensor1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_FR2FR_ftsensor2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="FR2FR_ftsensor2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_FR2FR_ftsensor2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_FR2FR_ftsensor3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="FR2FR_ftsensor3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_FR2FR_ftsensor3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+<!-- Force and torque sensor -->
+  <gazebo reference="FR2FR_ftsensor1">
+    <provideFeedback>true</provideFeedback>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+      <updateRate>100.0</updateRate>
+      <topicName>/tracked/ft_sensor_FR2FR_ftsensor1</topicName>
+      <jointName>FR2FR_ftsensor1</jointName>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="FR2FR_ftsensor2">
+    <provideFeedback>true</provideFeedback>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+      <updateRate>100.0</updateRate>
+      <topicName>/tracked/ft_sensor_FR2FR_ftsensor2</topicName>
+      <jointName>FR2FR_ftsensor2</jointName>
+    </plugin>
+  </gazebo>
 
 
 

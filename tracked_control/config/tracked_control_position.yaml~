@@ -33,6 +33,10 @@ tracked:
     type: position_controllers/JointPositionController
     joint: joint2
     pid: {p: 50.0, i: 0.01, d: 10.0}
+  FR2FR_ftsensor1_position_controller:
+    type: position_controllers/JointPositionController
+    joint: FR2FR_ftsensor1
+    pid: {p: 50.0, i: 0.01, d: 10.0}
   diff_drive_controller_front:
     type        : "diff_drive_controller/DiffDriveController"
     left_wheel  : 'base2wheel_left_front_main'

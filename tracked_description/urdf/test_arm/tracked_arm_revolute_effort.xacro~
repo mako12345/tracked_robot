@@ -7,7 +7,7 @@
     <child link="m1"/>
     <origin xyz="0 0 ${l_bh/2}" rpy="0 0 ${PI}"/>
     <axis xyz="0 0 1"/>
-    <limit lower="${-PI}" upper="${PI}" effort="10" velocity="3" />
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="1" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -42,7 +42,7 @@
     <child link="link2"/>
     <origin xyz="0 0 ${m_h}" rpy="0 0 0"/>
     <axis xyz="0 -1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="1" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -77,8 +77,8 @@
     <parent link="link2"/>
     <child link="link3"/>
     <origin xyz="0 0 ${height2}" rpy="0 0 0"/>
-    <axis xyz="0 -1 0"/>
-    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="3" />
+    <axis xyz="0 1 0"/>
+    <limit lower="${-PI}" upper="${PI}" effort="1000000" velocity="1" />
     <dynamics damping="0.7"/>
   </joint>
 
@@ -101,57 +101,13 @@
 
     <inertial>
       <origin xyz="0 0 ${height3/2}" rpy="0 0 0"/>
-      <mass value="${mass}"/>
+      <mass value="${0.3}"/>
       <inertia
 	  ixx="${mass / 12.0 * (width*width + height3*height3)}" ixy="0.0" ixz="0.0"
 	  iyy="${mass / 12.0 * (height3*height3 + width*width)}" iyz="0.0"
 	  izz="${mass / 12.0 * (width*width + width*width)}"/>
     </inertial>
   </link>
-
-<!--  <joint name="tip_fixed" type="continuous">-->
-<!--    <parent link="link3"/>-->
-<!--    <child link="tip_cylinder"/>-->
-<!--    <origin xyz="0 0 ${height2}" rpy="0 0 0"/>-->
-<!--    <axis xyz="0 -1 0"/>-->
-<!--    <limit lower="${-PI}" upper="${PI}" effort="10000000000000" velocity="3" />-->
-<!--    <dynamics damping="0.7"/>-->
-<!--  </joint>-->
-
-  <joint name="tip_fixed" type="fixed">
-    <parent link="link3"/>
-    <child link="tip_cylinder"/>
-    <origin xyz="0 0 ${height2}" rpy="0 0 0"/>
-  </joint>
-
-  <!-- Top Link -->
-  <link name="tip_cylinder">
-    <collision>
-      <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}"/>
-      <geometry>
-	<cylinder radius="${width/2}" length="${width}"/>
-      </geometry>
-    </collision>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}"/>
-      <geometry>
-	<cylinder radius="${width/2}" length="${width}"/>
-      </geometry>
-      <material name="grey"/>
-    </visual>
-
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.00001"/>
-      <inertia
-	  ixx="0.00000001" ixy="0.0" ixz="0.0"
-	  iyy="0.00000001" iyz="0.0"
-	  izz="0.00000001"/>
-    </inertial>
-  </link>
-
-
 
   <joint name="link3_2camera2" type="fixed">
     <parent link="link3"/>
@@ -217,10 +173,10 @@
   <transmission name="tran_base2m1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="base2m1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor_base2m1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -228,10 +184,10 @@
   <transmission name="tran_joint1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="joint1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor_joint1">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -239,59 +195,12 @@
   <transmission name="tran_joint2">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="joint2">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor_joint2">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-<!--  <transmission name="tran_tip_fixed">-->
-<!--    <type>transmission_interface/SimpleTransmission</type>-->
-<!--    <joint name="tip_fixed">-->
-<!--      <hardwareInterface>PositionJointInterface</hardwareInterface>-->
-<!--    </joint>-->
-<!--    <actuator name="motor_tip_fixed">-->
-<!--      <hardwareInterface>PositionJointInterface</hardwareInterface>-->
-<!--      <mechanicalReduction>1</mechanicalReduction>-->
-<!--    </actuator>-->
-<!--  </transmission>-->
-
-<!-- Force and torque sensor -->
-  <gazebo reference="joint1">
-    <provideFeedback>true</provideFeedback>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-      <updateRate>100.0</updateRate>
-      <topicName>/tracked/ft_sensor_joint1</topicName>
-      <jointName>joint1</jointName>
-    </plugin>
-  </gazebo>
-
-  <gazebo reference="joint2">
-    <provideFeedback>true</provideFeedback>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-      <updateRate>100.0</updateRate>
-      <topicName>/tracked/ft_sensor_joint2</topicName>
-      <jointName>joint2</jointName>
-    </plugin>
-  </gazebo>
-
-  <gazebo reference="tip_fixed">
-    <provideFeedback>true</provideFeedback>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-      <updateRate>100.0</updateRate>
-      <topicName>/tracked/ft_sensor_tip_fixed</topicName>
-      <jointName>tip_fixed</jointName>
-    </plugin>
-  </gazebo>
 </robot>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <launch>
-  <param name="use_sim_time" value="false"/>
+  <param name="use_sim_time" value="true"/>
   <param name="/rviz/robot_description"
-    command="$(find xacro)/xacro --inorder '$(find tracked_description)/urdf/rviz/tracked_rviz.xacro'" />
+    command="$(find xacro)/xacro --inorder '$(find tracked_description)/urdf/test_arm/test_arm.xacro'" />
 
   <!-- send fake joint values -->
   <node name="joint_state_publisher2" pkg="joint_state_publisher" type="joint_state_publisher">
@@ -27,6 +27,6 @@
 
 
 
-  <include file="$(find hitro_sim_control)/launch/hitro_sim_gui.launch" />
+<!--  <include file="$(find hitro_sim_control)/launch/hitro_sim_gui.launch" />-->
 
 </launch>

@@ -11,15 +11,7 @@
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/tracked.world"/>-->
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/roll2.world"/>-->
-    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover0deg.world"/>
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover10deg.world"/>-->
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover10deg_hard.world"/>-->
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover15deg.world"/>-->
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover15deg_hard.world"/>-->
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover20deg.world"/>-->
-<!--    <arg name="world_name" value="$(find tracked_gazebo)/worlds/rollover20deg_hard.world"/>-->
+    <arg name="world_name" value="$(find tracked_gazebo)/worlds/test.world"/>
 
     <arg name="debug" value="$(arg debug)" />
     <arg name="gui" value="$(arg gui)" />
@@ -30,13 +22,13 @@
 
   <!-- Load the URDF into the ROS Parameter Server -->
 <!--  <param name="robot_description" command="$(find xacro)/xacro -inorder '$(find tracked_description)/urdf/gazebo/tracked_ft.xacro'" />-->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find tracked_description)/urdf/gazebo/tracked.xacro'" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find tracked_description)/urdf/test_arm/test_arm.xacro'" />
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model tracked -param robot_description"/>
+    args="-urdf -model test_arm -param robot_description"/>
 
   <!-- ros_control tracked launch file -->
-  <include file="$(find tracked_control)/launch/tracked_control.launch" />
+  <include file="$(find tracked_control)/launch/test_arm_control.launch" />
 
 </launch>
